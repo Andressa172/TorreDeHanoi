@@ -1,4 +1,4 @@
-#define MAXPILHA 6
+#define MAXPILHA 100
 
 struct TpPilhaM2
 {
@@ -9,7 +9,7 @@ void inicializar(TpPilhaM2 &pm, int qtde)
 {
 	int i, qtdeElem = MAXPILHA / qtde;
 	
-	for(i=0; i<=qtde; i++)
+	for(i=0; i<qtde; i++)
 	{
 		pm.base[i] = qtdeElem * i;
 		pm.topo[i] = pm.base[i]- 1;
