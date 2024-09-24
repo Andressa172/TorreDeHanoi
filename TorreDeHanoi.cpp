@@ -20,7 +20,7 @@ char menuPrincipal(void)
 	printf("\n[B] - Simulacao automatica");
 	printf("\n[ESC] - Sair");
 	printf("\n\nOpcao: ");
-	return toupper(getche());
+	return toupper(getche()); 
 }
 
 void manual(TpPilhaM2 &pm)
