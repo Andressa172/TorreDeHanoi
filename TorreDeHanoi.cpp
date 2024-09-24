@@ -38,13 +38,17 @@ char validarMovimento(TpPilhaM2 pm, int origem, int destino)
     {
         printf("\nTorre de origem vazia! Escolha outra torre\n");
         aux = -1;
-    } else{
+    }
+	else
+	{
     	int topoOrigem = elementoTopo(pm, origem);
     	int topoDestino;
 
-        if (pilhaVazia(pm, destino)) {
+        if (pilhaVazia(pm, destino))
+		{
             topoDestino = 0; //***
-        } else {
+        } else
+		{
             topoDestino = elementoTopo(pm, destino);
         }
 
@@ -80,7 +84,7 @@ void manual(TpPilhaM2 &pm)
     printf("\nQuantidade de discos (MIN:3 - MAX:10): ");
     scanf("%d", &qtdeDisco);
 
-    if (qtdeDisco >= 3 && qtdeDisco <= 10)
+    if(qtdeDisco >= 3 && qtdeDisco <= 10)
     {
         t.origem = 0;
         valor = qtdeDisco;
@@ -106,7 +110,7 @@ void manual(TpPilhaM2 &pm)
 
         printf("\n\n*** MOVIMENTANDO DA TORRE %d PARA TORRE %d\n", t.origem + 1, t.destino + 1);
 
-        while (sair != -1 || !pilhaVazia(pm, t.origem) || !pilhaVazia(pm, t.aux)) //movimentacao
+        while (sair != -1 || !pilhaVazia(pm, t.origem) && !pilhaVazia(pm, t.aux)) //movimentacao
         {
             int origem, destino;
             exibirTorres(pm);
@@ -144,74 +148,75 @@ void manual(TpPilhaM2 &pm)
 
 
 //gui
-//void manual(TpPilhaM2 &pm)
-//{
-//	int qtdeDisco, i=0, valor, movimento=0, op;
-//	TpTorre t;
-//	
-//	printf("\nQuantidade de discos (MIN:3 - MAX:10): ");
-//	scanf("%d",&qtdeDisco);
-//	if(qtdeDisco >=3 && qtdeDisco <= 10)
-//	{
-//		t.origem = 0;
-//		valor = qtdeDisco;
-//		while(i<qtdeDisco)
-//		{
-//			inserir(pm,valor,0); //na torre origem?
-//			valor--;
-//			i++;
-//		}
-//		
-//		//TESTE PARA SABER SE ESTÁ TUDO CERTO NO INSERIR
-//		exibir(pm,t.origem);
-//		getch();
-//		
-//		//opção 2-3 porque a torre já começa na 1
-//		printf("\nPara qual pilha voce deseja levar a torre?(2 - 3) ");
-//		scanf("%d",&t.destino);
-//		
-//		t.destino--;//trantando o destino já que nas pilhas são 0,1,2
-//		
-//		//EU ACHO QUE PARA A GENTE APENAS USAR AS PILHAS MULTIPLAS TEM QUE SER ISSO
-//		if(t.destino == 1) //nossa auxiliar vai ser a pilha 2
-//		{
-//			printf("\n\n*** MOVIMENTANDO DA TORRE %d PARA TORRE %d\n",t.origem+1,t.destino+1);
-//			t.aux = 2;
-//			while(!pilhaVazia(pm,t.origem) || !pilhaVazia(pm,t.aux))
-//			{
-//				/*
-//				aqui teria que fazer a parte de perguntar a torre de onde ele vai tirar o disco e para qual torre
-//				ele deseja levar, fazendo as validações se é possivel ou não fazer a movimentação.
-//				A repetição vai se encerrar quando não houver mais disco na origem e tambem na auxiliar
-//				isso indica que todos os disco estão devidamente na torre destino.
-//				
-//				OQUE FAZER NESSA REPETIÇÃO COLOCAMOS NO IF DE BAIXO
-//				*/
-//				
-//				
-//				movimento++; //contador para saber o total de movimentos
-//			}
-//		}
-//		else
-//		if(t.destino == 2) //nossa auxiliar vai ser a pilha 1
-//		{
-//			printf("\n\n*** MOVIMENTANDO DA TORRE %d PARA TORRE %d\n",t.origem+1,t.destino+1);
-//			t.aux = 1;
-//			while(!pilhaVazia(pm,t.origem) || !pilhaVazia(pm,t.aux))
-//			{
-//				
-//				
-//				movimento++; //contador para saber o total de movimentos
-//			}
-//		}
-//		else
-//			printf("\nTorre invalida!\n");
-//		
-//	}
-//	else
-//		printf("\nQuantidade de disco invalida!\n");
-//
-//}
+void manual(TpPilhaM2 &pm)
+{
+	int qtdeDisco, i=0, valor, movimento=0, op;
+	int origem;
+	TpTorre t;
+	
+	printf("\nQuantidade de discos (MIN:3 - MAX:10): ");
+	scanf("%d",&qtdeDisco);
+	if(qtdeDisco >=3 && qtdeDisco <= 10)
+	{
+		t.origem = 0;
+		valor = qtdeDisco;
+		while(i<qtdeDisco)
+		{
+			inserir(pm,valor,0); //na torre origem?
+			valor--;
+			i++;
+		}
+	
+		//TESTE PARA SABER SE ESTÁ TUDO CERTO NO INSERIR
+		exibir(pm,t.origem);
+		getch();
+		
+		//opção 2-3 porque a torre já começa na 1
+        printf("\nPara qual torre deseja mover o disco? (2 ou 3): ");
+        scanf("%d",&t.destino);
+		t.destino--;//trantando o destino já que nas pilhas são 0,1,2
+		
+		if(t.destino == 1) //pilha 2
+			t.aux = 2;
+		else
+		if(t.destino == 2) //pilha 3
+			t.aux = 1;
+		else
+			printf("\nTorre invalida!\n");
+		
+		while(!pilhaVazia(pm,0) && !pilhaVazia(pm,t.aux))
+		{
+			
+			/*
+			aqui teria que fazer a parte de perguntar a torre de onde ele vai tirar o disco e para qual torre
+			ele deseja levar, fazendo as validações se é possivel ou não fazer a movimentação.
+			A repetição vai se encerrar quando não houver mais disco na origem e tambem na auxiliar
+			isso indica que todos os disco estão devidamente na torre destino.
+				
+			OQUE FAZER NESSA REPETIÇÃO COLOCAMOS NO IF DE BAIXO
+			*/
+			if(pilhaVazia(pm,t.destino))
+				inserir(pm,retirar(pm,t.origem),t.destino);
+			else
+			if(elementoTopo(pm,t.origem) < elementoTopo(pm,t.destino))
+				inserir(pm,retirar(pm,t.origem),t.destino);
+			
+			printf("\n\nDe qual torre deseja mover o disco? (1, 2 ou 3): ");
+	        scanf("%d",&t.origem);
+	        t.origem--;
+			printf("\nPara qual torre deseja mover o disco? (2 ou 3): ");
+       		scanf("%d",&t.destino);
+			t.destino--;	
+				
+			movimento++; //contador para saber o total de movimentos
+		}
+		
+		
+	}
+	else
+		printf("\nQuantidade de disco invalida!\n");
+
+}
 
 void automatico(TpPilhaM2 &pm)
 {
