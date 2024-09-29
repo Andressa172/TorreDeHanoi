@@ -27,9 +27,9 @@ char menuPrincipal(void)
 
 void exibirTorres(TpPilhaM2 pm)
 {
-    printf("\nTorre 1: "); exibir(pm, 0);
-    printf("\nTorre 2: "); exibir(pm, 1);
-    printf("\nTorre 3: "); exibir(pm, 2);
+    printf("\nTorre 1: "); exibe(pm, 0);
+    printf("\nTorre 2: "); exibe(pm, 1);
+    printf("\nTorre 3: "); exibe(pm, 2);
 }
 
 char validarMovimento(TpPilhaM2 pm, int origem, int destino)
@@ -64,95 +64,83 @@ char validarMovimento(TpPilhaM2 pm, int origem, int destino)
     return aux;
 }
 
-/* TODO (andressa#1#): adicionar funcao */
 void moverDisco(TpPilhaM2 &pm, int origem, int destino)
 {
     int disco = retirar(pm, origem);
     inserir(pm, disco, destino);
 }
 
-//andressa
-//void manual(TpPilhaM2 &pm)
+void criaBase(TpPilhaM2 pm)
+{
+	int QTDE_T;
+	TpPilhaM2 aux;
+	int c=15,l=20;
+//	inicializa(aux,3);
+	for(int i =0;i<QTDE_T;i++)
+		while(!pilhaVazia(pm,i))
+		{
+			inserir(aux,retirar(pm,i),i);
+		}
+	limpatela2();
+	montaast();
+	
+	exibe(c,l,aux,0);
+	
+	c+=24;	
+	exibe(c,l,aux,1);
+	
+	c+=24;
+	exibe(c,l,aux,2);
+}
+
+//void exibeTrocaInvalida(TpPilhaM2 pm,int origem,int destino)//grafico
 //{
-//	system("cls");
-//	FormularioMenu();
-//    int qtdeDisco, i = 0, valor, movimento = 0;
-//    int sair = 0;
-//    TpTorre t;
-//	Layout("Modo Manual");
-
+//	TpPilhaM2 aux;
+//	int c=P_COLUNA,l=20,vet[3] = {0,0,0},i=0,posOrigem,posDestino;
+//	inicializa(aux,QTDE_T);
+//	posOrigem = c+24*origem;
+//	posDestino = c+24*destino;
+//	criaBase(pm,vet);
+//
+//	sobe(posOrigem,l,vet[origem],elemtopo(pm,origem));
+//	anda(origem,destino,elemtopo(pm,origem));
+//	textcolor(RED);
+//	gotoxy(posDestino+2,5);printf("X");
+//	limpalinha(3,5,70);
+//	anda(destino,origem,elemtopo(pm,origem));
+//	desce(posOrigem,l,vet[origem]-1,elemtopo(pm,origem));
 //	
-//    printf("\nQuantidade de discos (MIN:3 - MAX:10): ");
-//    scanf("%d", &qtdeDisco);
-
-//    if(qtdeDisco >= 3 && qtdeDisco <= 10)
-//    {
-//        t.origem = 0;
-//        valor = qtdeDisco;
-//        while (i < qtdeDisco)
-//        {
-//            inserir(pm, valor, 0); // origem
-//            valor--;
-//            i++;
-//        }
-
-//        exibirTorres(pm);
-//        getch();
-
-//        printf("\nPara qual pilha voce deseja levar a torre? (2 - 3): ");
-//        scanf("%d", &t.destino);
-//        t.destino--;
-
-//		if (t.destino == 1) {
-//            t.aux = 2;
-//        } else {
-//            t.aux = 1;
-//        }
-
-//        printf("\n\n*** MOVIMENTANDO DA TORRE %d PARA TORRE %d\n", t.origem + 1, t.destino + 1);
-
-//        while (sair != -1 || !pilhaVazia(pm, t.origem) && !pilhaVazia(pm, t.aux)) //movimentacao
-//        {
-//            int origem, destino;
-//            exibirTorres(pm);
-//            printf("\n\nDe qual torre deseja mover o disco? (1, 2 ou 3): ");
-//            scanf("%d", &origem);
-//            origem--;
-
-//            printf("\nPara qual torre deseja mover o disco? (1, 2 ou 3): ");
-//            scanf("%d", &destino);
-//            destino--;
-
-//            if (validarMovimento(pm, origem, destino))
-//            {
-//                moverDisco(pm, origem, destino);
-//                movimento++;
-//            }
-
-//            if (pilhaVazia(pm, t.origem) && pilhaVazia(pm, t.aux) && !pilhaVazia(pm, t.destino)) //se chegou no fim
-//            {
-//                printf("\n\n*** Jogo completado com sucesso em [%d] movimentos! ***\n", movimento);
-//                sair = -1;
-//                getch();
-//            }
-//        }
-//    }
-//    else
-//    {
-//    	limpatela();
-//        printf("\nQuantidade de discos invalida!\n");
-//        getch();
-//    }
+//}
+//
+//void trocaTorre(TpPilhaM &pm,int origem,int destino)
+//{
+//	exibeTroca(pm,origem,destino);
+//	insere(pm,retira(pm,origem),destino);
+//	criaBase(pm);
+//	
 //}
 
+//void trocaTorre(TpPilhaM &pm,int origem,int destino)
+//{
+//	exibeTroca(pm,origem,destino);
+//	insere(pm,retira(pm,origem),destino);
+//	criaBase(pm);
+//	
+//}
 
-//gui
 void manual(TpPilhaM2 &pm)
 {
-	int qtdeDisco, i=0, valor, movimento=0, op;
-	int origem;
+	int qtdeDisco, i=0, valor, linha=0, movimento=0, op;
+	int origem, destino;
 	TpTorre t;
-	
+	limpatela();
+	Layout("Modo Manual");
+	getch();
+	system("cls");
+	FormularioMenu();
+	criaBase(pm);
+	gotoxy(3,3);
+	textcolor(WHITE);
 	printf("\nQuantidade de discos (MIN:3 - MAX:10): ");
 	scanf("%d",&qtdeDisco);
 	if(qtdeDisco >=3 && qtdeDisco <= 10)
@@ -165,8 +153,11 @@ void manual(TpPilhaM2 &pm)
 			valor--;
 			i++;
 		}
-
-		printf("\nPara qual haste deseja mover o disco? (2 ou 3): ");
+		
+		printf("Digite o caminho(2 ou %c 3):     ",175);
+		printf("\b\b\b\b\b");
+		
+//		printf("\nPara qual haste deseja mover o disco? (2 ou 3): ");
 	    scanf("%d",&t.destino);
 		t.destino--;
 		do
@@ -174,6 +165,7 @@ void manual(TpPilhaM2 &pm)
 			//VALIDAÇÃO PARA FAZER AS MOVIMENTAÇÕES
        		if(pilhaVazia(pm,t.destino))
        		{
+       			
 				inserir(pm,retirar(pm,t.origem),t.destino);
        			printf("\nDisco movido com sucesso!");
        			movimento++;
@@ -185,8 +177,10 @@ void manual(TpPilhaM2 &pm)
 				printf("\nDisco movido com sucesso!");
 				movimento++;
 			}
-			else
+			else{
+//				exibeTrocaInvalida(pm,origem,destino);
 				printf("Erro! Nao foi possivel realizar o movimento!\n");
+			}
 				
 			
 			//EXIBIÇÃO DAS PILHAS

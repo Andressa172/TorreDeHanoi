@@ -2,6 +2,7 @@
 #define KEY_DOWN 80
 #define KEY_ESC 27
 #define KEY_ENTER 13
+#include "TADPilhaM2.h"
 
 struct TpMenu
 {

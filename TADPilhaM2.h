@@ -1,4 +1,5 @@
 #define MAXPILHA 100
+#include "TADVisual.h"
 
 struct TpPilhaM2
 {
@@ -41,8 +42,18 @@ int elementoTopo(TpPilhaM2 pm, int np)
 	return pm.pilha[pm.topo[np]];
 }
 
-void exibir(TpPilhaM2 pm, int np)
+//void exibir(TpPilhaM2 pm, int np)
+//{
+//	while(!pilhaVazia(pm,np))
+//		printf("\nElemento: %d",retirar(pm,np));
+//}
+
+int exibe(int c,int l,TpPilhaM2 pm,int np)
 {
+	int aux;
 	while(!pilhaVazia(pm,np))
-		printf("\nElemento: %d",retirar(pm,np));
+		{
+			aux=retirar(pm,np);
+			grafic(c,l--,aux);
+		}
 }
