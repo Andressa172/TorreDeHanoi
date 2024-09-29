@@ -232,7 +232,9 @@ void manual(TpPilhaM2 &pm)
 		        t.origem--;
 				printf("\nPara qual torre deseja mover o disco? (1, 2 ou 3): ");
 	       		scanf("%d",&t.destino);
-				t.destino--;	
+				t.destino--;
+				
+				//FAZER VERIFICAÇÃO SE CASO O CARA NÃO DIGITAR NUMERO VALIDOS (1, 2 E 3)	
 		 	}
 		 	
 		 	//SE CASO A PESSOA CONSEGUIU MOVER TUDO
