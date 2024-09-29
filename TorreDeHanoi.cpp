@@ -4,6 +4,7 @@
 #include<conio2.h>
 #include <unistd.h>
 #include <time.h> 
+#include<math.h>
 
 #include "TADPilhaM2.h"
 #include "TADVisual.h"
@@ -160,12 +161,12 @@ void manual(TpPilhaM2 &pm)
 		valor = qtdeDisco;
 		while(i<qtdeDisco)
 		{
-			inserir(pm,valor,0); //na torre origem?
+			inserir(pm,valor,0);
 			valor--;
 			i++;
 		}
 
-		printf("\nPara qual torre deseja mover o disco? (2 ou 3): ");
+		printf("\nPara qual haste deseja mover o disco? (2 ou 3): ");
 	    scanf("%d",&t.destino);
 		t.destino--;
 		do
@@ -249,32 +250,140 @@ void manual(TpPilhaM2 &pm)
 
 }
 
-//void automatico(TpPilhaM2 &pm)
-//{
-//	int qtdeDisco, i=0, valor;
-//	TpTorre t;
-//	Layout("Modo Automatico");
-//	printf("\nQuantidade de discos (MIN:3 - MAX:10): ");
-//	scanf("%d",&qtdeDisco);
-//	if(qtdeDisco >= 3 && qtdeDisco <= 10)
-//	{
-//		t.origem=0;
-//		valor = qtdeDisco;
-//		while(i<qtdeDisco)
-//		{
-//			inserir(pm,valor,0);
-//			valor--;
-//			i++;
-//		}
-//					
-//		/*TESTE PARA SABER SE ESTÁ TUDO CERTO NO INSERIR
-//		exibir(pm,t.origem);
-//		getch(); */
-//					
-//	}
-//	else
-//		printf("\nQuantidade de disco invalida!\n");
-//}
+//SIMULAÇÃO AUTOMATICA
+void automatico(TpPilhaM2 &pm)
+{
+    int disco, i, qtdeDisco, auxiliar;
+    int movimentosTotal;
+    TpTorre t;
+    
+    t.origem = 0; //sempre começa na pilha 1
+    //PEGANDO A QUANTIADE DE DISCO QUE VAI SER MOVIMENTADO
+    printf("\nQuantidade de discos (MIN:3 - MAX:10): ");
+    scanf("%d",&qtdeDisco);
+    
+    //CALCULANDO A QUANTIDADE TOTAL DE MOVIMENTOS PARA FINALIZAR AS MOVIMENTAÇÕES
+    movimentosTotal = pow(2, qtdeDisco) - 1;
+    
+    //PERGUNTANDO PARA QUAL HASTE ELE VAI QUERER MOVIMENTAR
+    printf("\nPara qual haste voce deseja levar os disco? (2 - 3): ");
+    scanf("%d",&t.destino);
+    t.destino--;
+
+	if(t.destino == 1)
+    	t.aux = 2;
+    if(t.destino == 2)
+        t.aux = 1;
+        
+    if(t.destino != 1 && t.destino != 2)
+    	printf("\nErro! Essa pilha não existe");
+    else
+    {
+	    //SE O NUMERO DE DISCO ESCOLHIDO FOR IMPAR DESTINO E AUXILAR TROCAM O PAPEL
+		if(qtdeDisco % 2 == 0)
+		{
+		    auxiliar = t.destino;
+		    t.destino = t.aux;
+		    t.aux = auxiliar;
+		}
+		
+		//INSERINDO OS DISCO DENTRO A PILHA ORIGEM
+		disco = qtdeDisco;
+		i=0;
+		while(i<qtdeDisco)
+		{
+			inserir(pm,disco,t.origem);
+			disco--;
+			i++;
+		}
+			
+		i=1;
+		while(i <= movimentosTotal)
+		{
+		    if(i%3 == 1) //HASTE 1
+			{
+		        //MOVIMENTAÇÃO DO DISCO DA HASTE ORIGEM PARA A HASTE DESTINO
+		        if(pilhaVazia(pm,t.destino) || (!pilhaVazia(pm,t.origem) && elementoTopo(pm,t.origem) < elementoTopo(pm,t.destino)))
+				{
+		                printf("\nMovendo disco da haste %d para haste %d\n",t.origem+1,t.destino+1);
+		                inserir(pm,retirar(pm,t.origem),t.destino);
+		        }
+				else //movendo da destino para origem
+				{
+		            printf("\nMovendo disco da haste %d para haste %d\n",t.destino+1,t.origem+1);
+		            inserir(pm,retirar(pm,t.destino),t.origem);
+		        }
+		    }
+			else
+			if(i%3 == 2) //HASTE 2
+			{
+		        //MOVIMENTAÇÃO DO DISCO DA HASTE ORIGEM PARA A HASTE AUXILIAR
+		        if(pilhaVazia(pm,t.aux) || (!pilhaVazia(pm,t.origem) && elementoTopo(pm,t.origem) < elementoTopo(pm,t.aux)))
+				{
+		            printf("\nMovendo disco da haste %d para haste %d\n",t.origem+1,t.aux+1);
+		            inserir(pm,retirar(pm,t.origem),t.aux);
+		        }
+				else //movendo da auxiliar para origem
+				{
+		            printf("\nMovendo disco da haste %d para haste %d\n",t.aux+1,t.origem+1);
+		            inserir(pm,retirar(pm,t.aux),t.origem);
+		        }
+		    }
+			else
+			if(i%3 == 3) //HASTE 3
+			{
+				//MOVIMENTAÇÃO DO DISCO DA HASTE AUXILAR PARA HASTE DESTINO
+		        if(pilhaVazia(pm,t.destino) || (!pilhaVazia(pm,t.aux) && elementoTopo(pm,t.aux) < elementoTopo(pm,t.destino)))
+				{
+		            printf("\nMovendo disco da haste %d para haste %d\n",t.aux+1,t.destino+1);
+		            inserir(pm,retirar(pm,t.aux),t.destino);
+		        }
+				else //movendo da destino para auxiliar
+				{
+		                printf("\nMovendo disco da haste %d para haste %d\n",t.destino+1,t.aux+1);
+		                inserir(pm,retirar(pm,t.destino),t.aux);
+		        }
+		    }
+		    i++; //CONTATOR PARA ENCERRAR QUANDO BATER A QUANTIDADE DE PASSOS TOTAL
+		    
+		    //EXIBIÇÃO DAS PILHAS
+			if(pilhaVazia(pm,0))
+			{
+				printf("\nPilha vazia!"); 
+				printf("\nPILHA 1\n");
+			}
+			else
+			{
+				exibir(pm,0);
+				printf("\nPILHA 1\n");
+			}
+			
+			if(pilhaVazia(pm,1))
+			{
+				printf("\nPilha vazia!");
+				printf("\nPILHA 2\n");
+			}
+			else
+			{
+				exibir(pm,1);
+				printf("\nPILHA 2\n");
+			}
+			if(pilhaVazia(pm,2))
+			{
+				printf("\nPilha vazia!");
+				printf("\nPILHA 3\n");
+			}
+			else
+			{
+				exibir(pm,2);
+				printf("\nPILHA 3\n");
+			}	
+		}
+		printf("\nAutomatico finalizado!\n");
+		printf("\nMovimentacoes: %d",movimentosTotal);
+		getch();
+	}
+}
 
 int main(void)
 {
@@ -302,7 +411,7 @@ int main(void)
 				break;
 				
 			case 'B':
-				//automatico(pm);
+				automatico(pm);
 				
 				break;
 				
