@@ -157,7 +157,10 @@ void manual(TpPilhaM2 &pm)
 	scanf("%d",&qtdeDisco);
 	if(qtdeDisco >=3 && qtdeDisco <= 10)
 	{
+		//o jogo começa sempre na haste 0
 		t.origem = 0;
+		
+		//colocando a quantidade de disco na haste de inicio
 		valor = qtdeDisco;
 		while(i<qtdeDisco)
 		{
@@ -165,91 +168,161 @@ void manual(TpPilhaM2 &pm)
 			valor--;
 			i++;
 		}
-
-		printf("\nPara qual haste deseja mover o disco? (2 ou 3): ");
-	    scanf("%d",&t.destino);
-		t.destino--;
+		
+		//EXIBIÇÃO DAS PILHAS
+		if(pilhaVazia(pm,0))
+		{
+			printf("\nPilha vazia!"); 
+			printf("\nPILHA 1\n");
+		}
+		else
+		{
+			exibir(pm,0);
+			printf("\nPILHA 1\n");
+		}
+		
+		if(pilhaVazia(pm,1))
+		{
+			printf("\nPilha vazia!");
+			printf("\nPILHA 2\n");
+		}
+		else
+		{
+			exibir(pm,1);
+			printf("\nPILHA 2\n");
+		}
+				
+		if(pilhaVazia(pm,2))
+		{
+			printf("\nPilha vazia!");
+			printf("\nPILHA 3\n");
+		}
+		else
+		{
+			exibir(pm,2);
+			printf("\nPILHA 3\n");
+		}
+		
+		//verificação para o usuario não tentar mover para mesma haste de origem
+//		while(t.destino != 1 && t.destino != 2)
+//		{
+//			textcolor(RED);
+//			printf("Erro! Nao e possivel mover para esta haste!\n");
+//			textcolor(WHITE);
+//			printf("\nPara qual haste deseja mover o disco? (2 ou 3): ");
+//			scanf("%d",&t.destino);
+//			t.destino--;
+//		}
+		
 		do
 		{
-			//VALIDAÇÃO PARA FAZER AS MOVIMENTAÇÕES
-       		if(pilhaVazia(pm,t.destino))
-       		{
-				inserir(pm,retirar(pm,t.origem),t.destino);
-       			printf("\nDisco movido com sucesso!");
-       			movimento++;
-       		}
-       		else
-			if(elementoTopo(pm,t.origem) < elementoTopo(pm,t.destino))
+			printf("\n\nDe qual torre deseja mover o disco? (1, 2 ou 3): ");
+			scanf("%d",&t.origem);
+			t.origem--;
+			printf("\nPara qual torre deseja mover o disco? (1, 2 ou 3): ");
+			scanf("%d",&t.destino);
+			t.destino--;
+			if(t.origem != t.destino)
 			{
-				inserir(pm,retirar(pm,t.origem),t.destino);
-				printf("\nDisco movido com sucesso!");
-				movimento++;
+				if((t.destino >= 0 && t.destino <= 2) && (t.origem >= 0  && t.origem <= 2))
+				{
+					//VALIDAÇÃO PARA FAZER AS MOVIMENTAÇÕES
+		       		if(pilhaVazia(pm,t.destino))
+		       		{
+						inserir(pm,retirar(pm,t.origem),t.destino);
+						textcolor(GREEN);
+		       			printf("\nMovido da haste: %d \t Para haste: %d",t.origem+1,t.destino+1);
+		       			movimento++;
+		       		}
+		       		else
+					if(elementoTopo(pm,t.origem) < elementoTopo(pm,t.destino))
+					{
+						inserir(pm,retirar(pm,t.origem),t.destino);
+						textcolor(GREEN);
+		       			printf("\nMovido da haste: %d \t Para haste: %d",t.origem+1,t.destino+1);
+						movimento++;
+					}
+					else
+					{
+						textcolor(RED);
+						printf("Erro! Nao foi possivel realizar o movimento!\n");
+					}
+					
+					//VOLTANDO PARA COR PADRÃO DO PROGRAMA
+					textcolor(WHITE);	
+						
+					
+					//EXIBIÇÃO DAS PILHAS
+					if(pilhaVazia(pm,0))
+					{
+						printf("\nPilha vazia!"); 
+						printf("\nPILHA 1\n");
+					}
+					else
+					{
+						exibir(pm,0);
+						printf("\nPILHA 1\n");
+					}
+					
+					if(pilhaVazia(pm,1))
+					{
+						printf("\nPilha vazia!");
+						printf("\nPILHA 2\n");
+					}
+					else
+					{
+						exibir(pm,1);
+						printf("\nPILHA 2\n");
+					}
+					
+					if(pilhaVazia(pm,2))
+					{
+						printf("\nPilha vazia!");
+						printf("\nPILHA 3\n");
+					}
+					else
+					{
+						exibir(pm,2);
+						printf("\nPILHA 3\n");
+					}
+				}
+				else
+				{
+					textcolor(RED);
+					printf("\nErro! Voce digitou uma haste que nao existe! Digite novamente...");
+					textcolor(WHITE);
+					printf("\nPara qual haste deseja mover o disco? (2 ou 3): ");
+				    scanf("%d",&t.destino);
+					t.destino--;
+				}
 			}
 			else
-				printf("Erro! Nao foi possivel realizar o movimento!\n");
-				
-			
-			//EXIBIÇÃO DAS PILHAS
-			if(pilhaVazia(pm,0))
 			{
-				printf("\nPilha vazia!"); 
-				printf("\nPILHA 1\n");
-			}
-			else
-			{
-				exibir(pm,0);
-				printf("\nPILHA 1\n");
+				textcolor(RED);
+				printf("Erro! Nao e possivel mover para mesma haste!\n");
+				textcolor(WHITE);
 			}
 			
-			if(pilhaVazia(pm,1))
-			{
-				printf("\nPilha vazia!");
-				printf("\nPILHA 2\n");
-			}
-			else
-			{
-				exibir(pm,1);
-				printf("\nPILHA 2\n");
-			}
 			
-			if(pilhaVazia(pm,2))
-			{
-				printf("\nPilha vazia!");
-				printf("\nPILHA 3\n");
-			}
-			else
-			{
-				exibir(pm,2);
-				printf("\nPILHA 3\n");
-			}	
 			
-			//VERIFICANDO SE A PESSOA AINDA NÃO GANHOU PARA SEGUIR JOGANDO
-			if((!pilhaVazia(pm,0) && !pilhaVazia(pm,1))
-		 	|| (!pilhaVazia(pm,0) && !pilhaVazia(pm,2)) || (!pilhaVazia(pm,1) && !pilhaVazia(pm,2)))
-		 	{
-		 		printf("\n\nDe qual torre deseja mover o disco? (1, 2 ou 3): ");
-		        scanf("%d",&t.origem);
-		        t.origem--;
-				printf("\nPara qual torre deseja mover o disco? (1, 2 ou 3): ");
-	       		scanf("%d",&t.destino);
-				t.destino--;
-				
-				//FAZER VERIFICAÇÃO SE CASO O CARA NÃO DIGITAR NUMERO VALIDOS (1, 2 E 3)	
-		 	}
-		 	
-		 	//SE CASO A PESSOA CONSEGUIU MOVER TUDO
-		 	if((pilhaVazia(pm,0) && pilhaVazia(pm,1))
-		 	|| (pilhaVazia(pm,0) && pilhaVazia(pm,2)) || (pilhaVazia(pm,1) && pilhaVazia(pm,2)))
-		 		printf("\nPARABENS VOCE GANHOU!\n");
-		
+			//VERIFICANDO SE A PESSOA GANHOU
+			if((pilhaVazia(pm,0) && pilhaVazia(pm,1)) || (pilhaVazia(pm,0) && pilhaVazia(pm,2)))
+			{
+			 	textcolor(13);
+				printf("\nPARABENS VOCE GANHOU!\n");
+				textcolor(WHITE);
+			}
 		}while((!pilhaVazia(pm,0) && !pilhaVazia(pm,1))
 		 || (!pilhaVazia(pm,0) && !pilhaVazia(pm,2)) || (!pilhaVazia(pm,1) && !pilhaVazia(pm,2)));
-		 
+		 textcolor(WHITE);
 		 printf("\nTotal de movimentos: %d\n",movimento);
 	}
 	else
-		printf("\nQuantidade de disco invalida!\n");
-
+	{
+		textcolor(RED);
+		printf("\nErro! Quantidade de disco invalida!\n");
+		textcolor(WHITE);
+	}
 }
 
 //SIMULAÇÃO AUTOMATICA
