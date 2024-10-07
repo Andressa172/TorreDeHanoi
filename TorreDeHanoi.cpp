@@ -6,6 +6,7 @@
 #include<time.h> 
 #include<math.h>
 
+#include "bootstrap.h"
 #include "TADPilhaM2.h"
 
 //STRUCT PARA AUXILIAR NAS MOVIMENTAÇÕES ENTRE AS PILHAS
@@ -17,13 +18,15 @@ struct TpTorre
 //FUNÇÃO QUE TEM AS OPÇÕES DO MENU
 char menuPrincipal(void)
 {
-	clrscr();
-	printf("### OPCOES DE JOGO ###");
-	printf("\n[A] - Jogar manualmente");
-	printf("\n[B] - Simulacao automatica");
-	printf("\n[C] - Informacoes sobre o jogo");
-	printf("\n[ESC] - Sair");
-	printf("\n\nOpcao: ");
+	application();
+    consolePrintf("topo", "verde", 0, "TORRE DE HANOI");
+    consolePrintf("subMenu", "verde", 0, "Selecione um item:");
+    consolePrintf("esquerda", "branco", 0, "[A] Jogar manual");
+    consolePrintf("esquerda", "branco", 1, "[B] Jogar automatico");
+    consolePrintf("esquerda", "branco", 2, "[C] Infos sobre o jogo");
+    consolePrintf("esquerda", "branco", 5, "[ESC] - Sair");
+    gotoxy(4, 15);
+	
 	return toupper(getche()); 
 }
 
@@ -33,8 +36,11 @@ void mostrarPilhas(TpPilhaM2 &pm)
 	//EXIBIÇÃO DAS PILHAS
 	if(pilhaVazia(pm,0))
 	{
-		printf("\nPilha vazia!"); 
-		printf("\nPILHA 1\n");
+		limpandoArea("rightside");
+		consolePrintf("direita", "verde_claro", 10, "Vazia");
+    	consolePrintf("direita", "verde", 11, "PILHA 1");
+//		printf("\nPilha vazia!"); 
+//		printf("\nPILHA 1\n");
 	}
 	else
 	{
@@ -46,6 +52,7 @@ void mostrarPilhas(TpPilhaM2 &pm)
 	{
 		printf("\nPilha vazia!");
 		printf("\nPILHA 2\n");
+		getch();
 	}
 	else
 	{
@@ -83,9 +90,14 @@ void manual(TpPilhaM2 &pm)
 	int qtdeDisco, i=0, valor, movimento=0, op;
 	int origem;
 	TpTorre t;
-	
-	printf("\nQuantidade de discos (MIN:3 - MAX:10): ");
+	application();
+    consolePrintf("topo", "verde", 0, "JOGO MANUAL");
+    consolePrintf("subMenu", "verde", 0, "     Jogando...    ");
+    consolePrintf("esquerda", "branco", 0, "[0] Voltar Menu");
+    consolePrintf("direita", "rosa_claro", 0, "Qual a quantidade de discos?");
+    consolePrintf("direita", "rosa", 1, "(MIN:3 - MAX:10) ");
 	scanf("%d",&qtdeDisco);
+	
 	if(qtdeDisco >=3 && qtdeDisco <= 10)
 	{
 		//o jogo começa sempre na haste 0
@@ -96,13 +108,15 @@ void manual(TpPilhaM2 &pm)
 		
 		//EXIBIÇÃO DAS PILHAS
 		mostrarPilhas(pm);
-
 		do
 		{
-			printf("\n\nDe qual torre deseja mover o disco? (1, 2 ou 3): ");
+			limpandoArea("rightside");
+			consolePrintf("direita", "rosa_claro", 0, "De qual torre deseja mover o disco?");
+    		consolePrintf("direita", "rosa", 1, "(1, 2 ou 3): ");
 			scanf("%d",&t.origem);
 			t.origem--;
-			printf("\nPara qual torre deseja mover o disco? (1, 2 ou 3): ");
+			consolePrintf("direita", "rosa_claro", 3, "Para qual torre deseja mover o disco?");
+    		consolePrintf("direita", "rosa", 4, "(1, 2 ou 3): ");
 			scanf("%d",&t.destino);
 			t.destino--;
 			if(t.origem != t.destino)
@@ -113,8 +127,8 @@ void manual(TpPilhaM2 &pm)
 		       		if(pilhaVazia(pm,t.destino))
 		       		{
 						inserir(pm,retirar(pm,t.origem),t.destino);
-						textcolor(GREEN);
-		       			printf("\nMovido da haste: %d \t Para haste: %d",t.origem+1,t.destino+1);
+						limpandoArea("rightside");
+						consolePrintf("direita", "verde_claro", 0, "Movido da haste %d\t->\t%d",t.origem+1,t.destino+1);
 		       			movimento++;
 		       		}
 		       		else
@@ -258,7 +272,37 @@ void automatico(TpPilhaM2 &pm)
 //FUNÇÃO QUE MOSTRA AS INFORMAÇÕES E REGRAS DO JOGO
 void informacoes(void)
 {
-	
+	char op;
+	do{
+		application();
+		consolePrintf("topo", "verde", 0, "Regras e Informacoes do Jogo");
+		consolePrintf("subMenu", "verde", 0, "Selecione um item:");
+		consolePrintf("esquerda", "branco", 0, "[M] Manual");
+		consolePrintf("esquerda", "branco", 1, "[A] Automatico");
+		consolePrintf("esquerda", "branco", 2, "[ESQ] Voltar Menu");
+		gotoxy(4, 15);
+    	
+        op = toupper(getche());
+        
+        switch(op){
+            case 'M':
+            	consolePrintf("direita", "rosa_claro", 0, "Manual:");
+				consolePrintf("direita", "branco", 1, "informacoes das regras do manual devem ser inseridas aqui xxxx");
+				consolePrintf("direita", "branco", 2, "xxxx xxxx xxxx xxxx xxxx xxxx xxxx");
+				getch();
+				limpandoArea("rightside");
+				application();            
+                break;
+            case 'A':
+            	consolePrintf("direita", "rosa_claro", 0, "Automatico:");
+				consolePrintf("direita", "branco", 1, "informacoes das regras do automatico devem ser inseridas aqui xxxx");
+				consolePrintf("direita", "branco", 2, "xxxx xxxx xxxx xxxx xxxx xxxx xxxx");
+				getch();      
+				limpandoArea("rightside");
+				application();          
+                break;
+		}
+	}while(op!=27);	
 }
 
 int main(void)
@@ -281,26 +325,20 @@ int main(void)
 		{
 			case 'A':
 				manual(pm);
-				
 				break;
 				
 			case 'B':
 				automatico(pm);
-				
 				break;
 			
 			case 'C':
-				//COLOCAR AS REGRAS E INFORMAÇÕES DO JOGO AQUI PARA O USUARIO
-				//já criei a função, só colocar os conteúdo dentro
-				//informacoes();
-				
+				informacoes();
 				break;
 				
-			case 27:
-				printf("\nJJogo encerrado!\n"); //pode colocar na parte de mensagem do jogo
+//			case 27:
+//				printf("\nJogo encerrado!\n"); //pode colocar na parte de mensagem do jogo
 		}
 		getch();
 	}while(op != 27);
-	
 	return 0;
 }
