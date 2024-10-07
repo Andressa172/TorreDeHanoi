@@ -1,4 +1,4 @@
-#define MAXPILHA 100
+#define MAXPILHA 30
 
 struct TpPilhaM2
 {
